@@ -13,10 +13,9 @@
 class pass1_assembler:
     def __init__(self,command):
         self.command=command
-        self.string=''
         self.symbol_table={}
         self.literal_table={}
-        self.pool_table=[]
+        self.pool_table=[0]
         self.MOT={}
         
     def START(self):
@@ -40,9 +39,10 @@ class pass1_assembler:
         reg=0
         reg1=0
         LOC=200
+        pool=0
         for i in self.command:
-            j=i.split(' ')   #   j=MOVER AREG = '5'
-            self.string=''
+            j=i.split(' ')   #  j=MOVER AREG = '5'
+        
             
             if j[0] not in self.symbol_table:
                 if j[0] not in IS and j[0] not in RG and j[0] not in AD and j[0] not in DS:
@@ -94,11 +94,18 @@ class pass1_assembler:
                             if j[a+2]=='=':
                                     print(' RG '+RG[j[a]]+' L ',reg,end='')
                                     self.literal_table[('='+j[a+3])]=LOC
+                                    pool+=1
                                     reg+=1
+                                
                             else:     
                                 print(' RG '+RG[j[a]]+' S ',reg1,end='')
                                 self.symbol_table[j[a+2]]=LOC
                                 reg1+=1
+                                
+            for a in range(0,len(j)):
+                if j[a]=='LTORG' or j[a]=='END':
+                    self.pool_table.append(self.pool_table[-1]+pool)
+                    
                                 
             print('\n')
             LOC+=1
@@ -119,20 +126,24 @@ class pass1_assembler:
         for i,val in self.literal_table.items():
             print(i,':',val)
         
+        print('\n3)Pool Table : \n')
+        for i in self.pool_table:
+            print(i)
         
         
         
-x=int(input())
+        
+        
+x=int(input('Enter the no. of lines in Source code :'))
 l1=[]
-
+print('Enter source code :')
 for i in range(0,x):
     line=input()
     l1.append(line)
     
-print('\nSource code_______________________________________________________________________________\n')
+print('\nSource code_________________________________________________________________________________\n')
 for i in l1:
     print(i)
-    
-    
+       
 ans=pass1_assembler(l1)
 ans.START()
