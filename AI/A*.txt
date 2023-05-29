@@ -1,0 +1,50 @@
+import random
+
+def encrypt(message, key):
+    encrypted_message = ""
+    for char in message:
+        if char.isalpha():
+            char = char.upper()
+            if char in key:
+                encrypted_message += key[char]
+            else:
+                encrypted_message += char
+        else:
+            encrypted_message += char
+    return encrypted_message
+
+def decrypt(encrypted_message, key):
+    decrypted_message = ""
+    for char in encrypted_message:
+        if char.isalpha():
+            char = char.upper()
+            for k, v in key.items():
+                if v == char:
+                    decrypted_message += k
+                    break
+            else:
+                decrypted_message += char
+        else:
+            decrypted_message += char
+    return decrypted_message
+
+def generate_key():
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    shuffled_letters = list(letters)
+    random.shuffle(shuffled_letters)
+    key = {letters[i]: shuffled_letters[i] for i in range(len(letters))}
+    return key
+
+# Generate a random key
+key = generate_key()
+
+# Input message
+message = "HELLO WORLD"
+
+# Encrypt the message
+encrypted_message = encrypt(message, key)
+print("Encrypted Message:", encrypted_message)
+
+# Decrypt the encrypted message
+decrypted_message = decrypt(encrypted_message, key)
+print("Decrypted Message:", decrypted_message)

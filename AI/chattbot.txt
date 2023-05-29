@@ -1,0 +1,20 @@
+def load_responses(file_path):
+    responses = {}
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        for i in range(0, len(lines), 2):
+            if i + 1 < len(lines):
+                question = lines[i].strip()
+                answer = lines[i+1].strip()
+                responses[question] = answer
+    return responses
+
+file_path = 'responses.txt'
+responses = load_responses(file_path)
+
+while True:
+    question = input("Ask a question: ")
+    if question.lower() == 'exit':
+        break
+    answer = responses.get(question, "I'm sorry, I don't have an answer for that.")
+    print(answer)
