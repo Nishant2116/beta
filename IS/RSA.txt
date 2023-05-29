@@ -1,0 +1,19 @@
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+
+# Generate RSA key pair
+key = RSA.generate(2048)
+
+# Get public key for encryption
+public_key = key.publickey()
+
+# Encrypt
+cipher = PKCS1_OAEP.new(public_key)
+plaintext = b'Nishant@123'
+ciphertext = cipher.encrypt(plaintext)
+print('Encrypted:', ciphertext)
+
+# Decrypt
+cipher = PKCS1_OAEP.new(key)
+decrypted = cipher.decrypt(ciphertext)
+print('Decrypted:', decrypted.decode('utf-8'))

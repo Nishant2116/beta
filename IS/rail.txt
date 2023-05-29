@@ -1,0 +1,87 @@
+def rail(option,message,key):
+    def rail_encrypt(message,key):
+        mat=[['0' for i in range(len(message))] for j in range(key)]
+        dir_down=False
+        row,col=0,0
+        for i in range(len(message)):
+            if (row==0) or (row==key-1):
+                  dir_down= not dir_down
+            mat[row][col]=message[i]
+            col+=1
+            
+            if dir_down:
+                 row+=1
+            else:
+                 row-=1
+        result=[]
+        for i in range(key):
+             for j in range(len(message)):
+                  if mat[i][j]!='0':
+                       result.append(mat[i][j])
+        print('Encrypted message :',"".join(result))
+
+
+             
+
+    def rail_decrypt(message,key):
+        mat=[['\n' for i in range(len(message))] for j in range(key)]
+        dir_down=None
+        row,col=0,0
+        for i in range(len(message)):
+            if row==0:
+                dir_down=True 
+            if row==key-1:
+                dir_down=False
+            
+            mat[row][col]='*'
+            col+=1
+            if dir_down:
+                row+=1
+            else:
+                row-=1
+
+        index=0
+        for i in range(key):
+            for j in range(len(message)):
+                if ((mat[i][j]=='*') and (index<len(message))):
+                    mat[i][j]=message[index]
+                    index+=1
+        
+        row,col=0,0
+
+        result=[]
+        for i in range(len(message)):
+            if row==0:
+                dir_down=True 
+            if row==key-1:
+                dir_down=False
+
+            if mat[row][col]!='*':
+                       result.append(mat[row][col])
+                       col+=1
+            if dir_down:
+                 row+=1
+            else:
+                 row-=1
+        print('Decrypted message :',"".join(result))
+
+    if option==1:
+        rail_encrypt(message,key)
+    elif option==2:
+        rail_decrypt(message,key)
+    else:
+        print('Wrong option choosen...')
+
+
+
+
+option=0
+while(option!=3):
+    print('\n1)Encrypt \n2)Decrypt \n3)Exit \nEnter your choice :')
+    option=int(input())
+    if option==3:
+        break
+    value=input('Enter the text :')
+    print('Enter the key :')
+    key=int(input())
+    rail(option,value,key)

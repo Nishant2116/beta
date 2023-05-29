@@ -1,0 +1,17 @@
+from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad,unpad
+
+
+key = b'mycipher' 
+cipher = DES.new(key, DES.MODE_ECB)
+
+
+password = 'Nishant@123'.encode('utf-8')
+padded_password = pad(password, 8)  
+enc_pass = cipher.encrypt(padded_password)
+
+print('Encrypted Text:', enc_pass)
+
+dec_pass = cipher.decrypt(enc_pass)
+unpadded_pass = unpad(dec_pass, 8).decode('utf-8') 
+print('Decrypted Text:', unpadded_pass)

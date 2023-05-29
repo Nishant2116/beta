@@ -1,0 +1,45 @@
+#caeser cipher
+def caeser(operation,value,key):
+
+    def caeser_encode(value,key):
+        result=''
+        for char in value:
+            if char.isupper():
+                result+=chr((ord(char)+key-65)%26+65)
+            else:
+                result+=chr((ord(char)+key-97)%26+97)
+        print('Encrypted Text :',result)
+    
+    
+    def caeser_decode(value,key):
+        result=''
+        for char in value:
+            if char.isupper():
+                result+=chr((ord(char)-key-65)%26+65)
+            else:
+                result+=chr((ord(char)-key-97)%26+97)
+        print('Decrypted Text :',result)
+
+
+
+
+
+
+    if operation==1:
+        caeser_encode(value,key)
+    elif operation==2:
+        caeser_decode(value,key)
+    else:
+        print('Wrong option choosen...')
+option=0
+while(option!=3):
+    print('\n1)Encrypt \n2)Decrypt \n3)Exit \nEnter your choice :')
+    option=int(input())
+    if option==3:
+        break
+    value=input('Enter the text :')
+    print('Enter the key :')
+    key=int(input())
+    caeser(option,value,key)
+
+
