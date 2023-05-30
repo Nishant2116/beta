@@ -1,0 +1,31 @@
+def vigenere_encrypt(plain_text, key):
+    encrypted_text = ""
+    key_index = 0
+    for char in plain_text:
+        if char.isalpha():
+            char = chr((ord(char.upper()) + ord(key[key_index].upper()) - 2 * ord('A')) % 26 + ord('A'))
+            key_index = (key_index + 1) % len(key)
+        encrypted_text += char
+    return encrypted_text
+
+
+def vigenere_decrypt(encrypted_text, key):
+    decrypted_text = ""
+    key_index = 0
+    for char in encrypted_text:
+        if char.isalpha():
+            char = chr((ord(char.upper()) - ord(key[key_index].upper()) + 26) % 26 + ord('A'))
+            key_index = (key_index + 1) % len(key)
+        decrypted_text += char
+    return decrypted_text
+
+
+# Example usage:
+message = "My name is Nishant"
+encryption_key = "KEY"
+
+encrypted_message = vigenere_encrypt(message, encryption_key)
+print("Encrypted message:", encrypted_message)
+
+decrypted_message = vigenere_decrypt(encrypted_message, encryption_key)
+print("Decrypted message:", decrypted_message)
