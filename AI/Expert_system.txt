@@ -1,0 +1,14 @@
+1.Import libraries
+2.Import data 
+3.Cleaning & EDA head,info,describe, plots : sns=barplot, kde,histograms,
+boxplots etc.
+4. get dummies
+5.plt.subplot(2,3,1-6),sns.barplot()
+6.data.corr(), heatmap
+7.scale data
+8.split data (x/y)
+9.model: 
+        from sklearn.svm import SVC
+        kernel='rbf' , C=10
+10.model evaluation : cm plot,report
+
