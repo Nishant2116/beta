@@ -1,0 +1,18 @@
+import numpy as np 
+import pandas as pd
+import seaborn as sns 
+from sklearn.datasets import fetch_california_housing
+import warnings 
+warnings.filterwarnings(action='ignore')
+
+boston=fetch_california_housing()
+
+data=pd.DataFrame(data=boston.data)
+
+data.columns=boston.feature_names
+
+data['PRICE']=boston.target
+
+data.info()
+
+from sklearn.linear_model import LinearRegression

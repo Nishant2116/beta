@@ -1,0 +1,30 @@
+from keras.datasets import mnist
+from tensorflow.keras import layers,models
+from tensorflow.keras.utils import to_categorical
+
+(train_images,train_labels),(test_images,test_labels)=mnist.load_data()
+
+train_images,test_images=train_images/255.0,test_images/255.0
+
+train_labels = to_categorical(train_labels)
+test_labels = to_categorical(test_labels)
+
+model=models.Sequential([
+    layers.Flatten(input_shape=(28,28)),
+    layers.Dense(128,activation='relu'),
+    layers.Dropout(0.2),
+    layers.Dense(10,activation='softmax')
+])
+
+model.compile(optimizer='adam',metrics=['accuracy'],loss='categorical_crossentropy')
+
+model.fit(train_images,train_labels,epochs=5)
+
+test_loss,test_acc=model.evaluate(test_images,test_labels)
+
+plt.imshow(test_images[0],cmap='gray')
+plt.title('Label: {}'.format(np.argmax(test_labels[0])))
+
+a=(model.predict(test_images))
+
+np.argmax(a[0])

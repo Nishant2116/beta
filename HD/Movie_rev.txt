@@ -1,0 +1,76 @@
+import tensorflow as tf
+from tensorflow.keras.datasets import imdb
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Embedding, GlobalAveragePooling1D
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow import keras
+import numpy as np
+from tensorflow.keras import layers
+
+
+(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
+
+# Load the IMDB word index
+word_index = imdb.get_word_index()
+
+# Reverse the word index to map indices to words
+reverse_word_index = dict([(value, key) for (key, value) in word_index.items()])
+
+# Pad sequences to a fixed length
+max_length = 256
+train_data = keras.preprocessing.sequence.pad_sequences(train_data, value=0, padding='post', maxlen=max_length)
+test_data = keras.preprocessing.sequence.pad_sequences(test_data, value=0, padding='post', maxlen=max_length)
+
+# Convert train_data and test_data to numpy arrays
+train_data = np.array(train_data)
+test_data = np.array(test_data)
+
+# Build and compile the model
+model = keras.Sequential([
+    layers.Embedding(input_dim=10000, output_dim=16),
+    layers.GlobalAveragePooling1D(),
+    layers.Dense(16, activation='relu'),
+    layers.Dense(1, activation='sigmoid')
+])
+
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train the model
+history = model.fit(train_data, train_labels, epochs=10,validation_split=0.2)
+
+# Evaluate the model
+test_loss, test_acc = model.evaluate(test_data, test_labels)
+print("\nTest Accuracy:", test_acc)
+
+# Predict sentiment for test reviews
+predictions = model.predict(test_data)
+
+
+# Filter out positive and negative reviews
+positive_reviews = []
+negative_reviews = []
+
+threshold = 0.45
+
+for review, prediction in zip(test_data, predictions):
+    review_text = ' '.join([reverse_word_index.get(idx, '?') for idx in review])
+    if prediction >= threshold:
+        positive_reviews.append((review_text, prediction))
+    else:
+        negative_reviews.append((review_text, prediction))
+
+
+# Print a few positive reviews
+print("Positive Reviews:")
+for review, prediction in positive_reviews[:1]:
+    print("Review:", review)
+    print("Prediction:", prediction)
+    print()
+
+
+# Print a few negative reviews
+print("Negative Reviews:")
+for review, prediction in negative_reviews[:1]:
+    print("Review:", review)
+    print("Prediction:", prediction)
+    print()

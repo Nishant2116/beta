@@ -1,0 +1,55 @@
+label_names = {
+    0: "T-shirt/top",
+    1: "Trouser",
+    2: "Pullover",
+    3: "Dress",
+    4: "Coat",
+    5: "Sandal",
+    6: "Shirt",
+    7: "Sneaker",
+    8: "Bag",
+    9: "Ankle boot"
+}
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from keras.datasets import fashion_mnist
+from tensorflow.keras import models,layers
+from tensorflow.keras.utils import to_categorical
+import matplotlib.pyplot as plt
+
+
+(train_images,train_labels),(test_images,test_labels)=fashion_mnist.load_data()
+
+train_images,test_images=train_images/255.0,test_images/255.0
+
+train_labels=to_categorical(train_labels)
+test_labels=to_categorical(test_labels)
+
+plt.imshow(train_images[0])
+plt.title('Label: {}'.format(np.argmax(train_labels[0])))
+
+
+model=models.Sequential([
+    layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)),
+    layers.MaxPooling2D((2,2)),
+    layers.Dropout(0.25),
+    layers.Conv2D(64, (3,3), activation='relu'),
+    layers.MaxPooling2D((2,2)),
+    layers.Dropout(0.25),
+    layers.Conv2D(128, (3,3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(128, activation='relu'),
+    layers.Dropout(0.25),
+    layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+history = model.fit(train_images, train_labels, epochs=1)
+
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print('Test accuracy:', test_acc)
+
+a=(model.predict(test_images))
+np.argmax(a[0])
